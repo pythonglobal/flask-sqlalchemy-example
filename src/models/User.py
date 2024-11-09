@@ -1,4 +1,7 @@
 import logging
+
+from sqlalchemy.exc import IntegrityError
+
 from models.database_handler import db
 
 
@@ -18,6 +21,10 @@ class User(db.Model):
             db.session.add(user)
             db.session.commit()
             return user
+        except IntegrityError:
+            db.session.rollback()
+            logging.error(f'User with username {username} already exists')
+            return None
         except Exception as e:
             logging.exception(f'Error creating user: {e}')
             db.session.rollback()

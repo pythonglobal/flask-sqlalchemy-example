@@ -1,5 +1,9 @@
 import logging
 
+from utils import add_src_to_path
+
+add_src_to_path()
+
 from app import flask_app
 from models.User import User
 
