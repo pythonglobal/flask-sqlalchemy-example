@@ -1,6 +1,7 @@
 import logging
 
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import relationship
 
 from models.database_handler import db
 
@@ -11,8 +12,15 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
 
+    # Establish one-to-one relationship with UserToken
+    token = relationship('UserToken', uselist=False, back_populates='user')
+
     def __repr__(self):
         return f"<User(id={self.id}, username='{self.username}')>"
+
+    @classmethod
+    def get_user_by_username(cls, username):
+        return cls.query.filter_by(username=username).first()
 
     @classmethod
     def create_user(cls, username, password):
