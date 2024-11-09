@@ -23,6 +23,10 @@ class User(db.Model):
         return cls.query.filter_by(username=username).first()
 
     @classmethod
+    def get_by_username_and_password(cls, username, password):
+        return cls.query.filter_by(username=username, password=password).first()
+
+    @classmethod
     def create_user(cls, username, password):
         try:
             user = cls(username=username, password=password)

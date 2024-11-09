@@ -1,5 +1,6 @@
 import logging
+from app import flask_app
 
 
 if __name__ == '__main__':
-    logging.info("hello")
+    flask_app.run()

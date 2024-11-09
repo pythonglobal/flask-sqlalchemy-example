@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data</title>
+</head>
+<body>
+    <h1>User Data</h1>
+    <pre id="userData"></pre>
+    <button id="logoutButton">Logout</button>
+
+    <script>
+        async function fetchUserData() {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('No token found. Please log in.');
+                window.location.href = '/login';
+                return;
+            }
+
+            const response = await fetch('/user_data', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                document.getElementById('userData').textContent = JSON.stringify(data, null, 2);
+            } else {
+                alert('Failed to fetch user data');
+                localStorage.removeItem('authToken');
+                window.location.href = '/login';
+            }
+        }
+
+        document.getElementById('logoutButton').addEventListener('click', function () {
+            localStorage.removeItem('authToken');
+            alert('You have been logged out.');
+            window.location.href = '/login';
+        });
+
+        fetchUserData();
+    </script>
+</body>
+</html>

@@ -18,6 +18,14 @@ class UserToken(db.Model):
         return f"<UserToken(id={self.id}, token='{self.token}')>"
 
     @classmethod
+    def get_by_user_id(cls, user_id):
+        return cls.query.filter_by(user_id=user_id).first()
+
+    @classmethod
+    def get_by_token(cls, token):
+        return cls.query.filter_by(token=token).first()
+
+    @classmethod
     def create_token(cls, token, user_id):
         try:
             user_token = cls(token=token, user_id=user_id)
